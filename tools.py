@@ -37,7 +37,7 @@ def detect_language(code: str) -> str:
         return "C++"
     elif "printf" in code:
         return "C"
-    elif "System.out.println" in code:
+    elif "System.out.println" in code or "static" in code:
         return "Java"
     return "Unknown"
 
@@ -48,7 +48,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 llm = ChatGroq(
-    model="llama-3.1-8b-instant",
+    model="Llama3-70b-8192",
     temperature=0,
     groq_api_key=os.getenv("API_KEY"),
 )

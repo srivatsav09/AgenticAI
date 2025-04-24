@@ -105,12 +105,12 @@ load_dotenv()
 class DebugResponse(BaseModel):
     language: str
     explanation: str
-    bugs: str
+    bugs: list[str]
     fixed_code: str
     optional_output: str = ""
 
 llm = ChatGroq(
-    model="llama-3.1-8b-instant",  # or llama-3-70b-8192
+    model= "Llama3-70b-8192", #"llama-3.1-8b-instant", 
     temperature=0,
     groq_api_key=os.getenv("API_KEY")
 )
@@ -136,10 +136,13 @@ agent = create_tool_calling_agent(llm=llm, prompt=prompt_template, tools=tools)
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=False)
 
 def run_debug_agent(code_input: str) -> dict:
+    print("in run debug function")
     try:
+        print("trying agent executor..")
         response = agent_executor.invoke({"query": code_input})
-        print("DEBUG RAW RESPONSE:", response)
-        print(parser.parse(response["output"]))  # Add this to log raw output
+        #print("DEBUG RAW RESPONSE:", response)
+        print(response["output"])
+        #print(parser.parse(response["output"]))  # Add this to log raw output
         return parser.parse(response["output"])
     except Exception as e:
         return {"error": str(e)}

@@ -23,22 +23,22 @@ if st.button("🔍 Analyze & Fix"):
     else:
         with st.spinner("Running debugging agent..."):
             result = run_debug_agent(code_input)
-
+            print(result)
         if isinstance(result, dict) or "error" not in result:
             st.subheader("📌 Detected Language")
             st.code(result.language or "Unknown")
 
             st.subheader("🧠 Code Explanation")
-            st.write(result.get("explanation", "No explanation found."))
+            st.write(result.explanation or "No explanation found.")
 
             st.subheader("🐞 Bug Report")
-            st.write(result.get("bugs", "No bugs found."))
+            st.write(result.bugs or "No bugs found.")
 
             st.subheader("✅ Fixed Code")
-            st.code(result.get("fixed_code", "No fix generated."), language="python")
+            st.code(result.fixed_code or "No fix generated.", language="python")
 
-            if result.get("optional_output"):
-                st.subheader("⚙️ Execution Output")
-                st.code(result["optional_output"])
+            # if result.get("optional_output"):
+            #     st.subheader("⚙️ Execution Output")
+            #     st.code(result["optional_output"])
         else:
             st.error("Something went wrong: \n" + str(result))
